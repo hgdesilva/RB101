@@ -1,0 +1,15 @@
+greeting: "Hello! Welcome to the mortgagte calculator"
+principal: "Please enter who much you would like to borrow."
+apr: | 
+  Please enter the ANNUAL(yearly) interest rate
+      known as APR e.g. 3.5 for 3.5%
+duration: Please enter how long you want to borrow this for - in years
+
+error: |
+  That doesn't seem right. 
+      The loan amount and loan duration must be whole numbers.
+      Please enter a number greater than 0
+
+again: Would you like to get another quote?
+
+bye: "Thank you. Goodbye!"
