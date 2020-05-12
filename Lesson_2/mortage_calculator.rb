@@ -56,3 +56,4 @@ loop do
 end
 
 prompt('bye')
+n
