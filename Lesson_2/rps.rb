@@ -1,15 +1,13 @@
-# RPS
-
-system "clear"
-
+system("clear")
 options = %w(rock paper scissors spock lizard)
+options_letters = ['r', 'p', 's', 'sp', 'l']
 
 combinations = {
-  'rock'=> ['scissors', 'lizard'],
+  'rock' => ['scissors', 'lizard'],
   'paper' => ['rock', 'spock'],
-  'scissors'=> ['paper', 'lizard'],
-  'spock'=> ['rock', 'scissors'],
-  'lizard'=> ['paper', 'spock']
+  'scissors' => ['paper', 'lizard'],
+  'spock' => ['rock', 'scissors'],
+  'lizard' => ['paper', 'spock']
 }
 
 score_store = {
@@ -18,7 +16,7 @@ score_store = {
   'draw' => 0
 }
 def prompt(message)
-  puts "=>#{message}"
+  puts "=> #{message}"
 end
 
 def display_choices(user_choice, computer_choice)
@@ -27,16 +25,16 @@ end
 
 def outcome(user_choice, computer_choice, combinations)
   if combinations[user_choice].include?(computer_choice)
-    return 'user'
+    'user'
   elsif combinations [computer_choice].include?(user_choice)
-    return 'computer'
+    'computer'
   else
-    return 'draw'
+    'draw'
   end
 end
 
 def update_score(result, score_store)
-  score_store[result] +=1
+  score_store[result] += 1
 end
 
 def display_outcome(result, score_store)
@@ -50,49 +48,65 @@ def display_outcome(result, score_store)
   end
   prompt("Your score is #{score_store['user']}")
   prompt("Computer's score is #{score_store['computer']}")
-  
 end
 
-def summary(score_store)
+def display_summary(score_store)
   rounds = score_store.values.inject(&:+)
-  if rounds >0
+  if rounds > 0
     prompt("After #{rounds} round(s)...the results are:")
-    prompt("You score #{score_store['user']}, the computer scored #{score_store['computer']}")
+    prompt("You score #{score_store['user']}")
+    prompt("the computer scored #{score_store['computer']}")
     if score_store['draw'] > 0
       prompt("with #{score_store['draw']} draw(s)")
     end
     puts
-    else
+  else
     prompt("Bye!")
-    end
+  end
+end
+
+def valid_input?(user_choice, options, options_letters)
+  options.include?(user_choice) || options_letters.include?(user_choice)
+end
+
+def standardize_choice(user_choice, options, option_letters)
+  if options.include?(user_choice)
+    user_choice
+  else
+    options[option_letters.index(user_choice)]
+  end
 end
 
 prompt("Welcome")
-puts "-"*45
- loop do
+puts "-" * 45
+loop do
   loop do
-    
     prompt("Please enter #{options.join(', ')}")
-    prompt("you can quit at any time by pressing q or Q")
-    user_choice = gets.chomp
+    prompt("or #{options_letters.join(', ')} respectively")
+    puts
+    prompt("You can quit at any time by pressing q or Q")
+    user_choice = gets.chomp.downcase
 
-    break if user_choice.downcase == 'q'
+    break if user_choice == 'q'
     computer_choice = options.sample
-    
-    if options.include?(user_choice)
+
+    if valid_input?(user_choice, options, options_letters)
+      user_choice = standardize_choice(user_choice, options, options_letters)
+      system "clear"
       display_choices(user_choice, computer_choice)
       result = outcome(user_choice, computer_choice, combinations)
-      update_score(result, score_store)  
+      update_score(result, score_store)
       display_outcome(result, score_store)
       puts
       break if score_store.values.inject(&:+) == 5
     else
       prompt("That didn't seem right...")
     end
-    
   end
-  summary(score_store)
+
+  display_summary(score_store)
   puts("Another round? Type Yes, Y or y to try again")
   break unless gets.chomp.downcase.start_with?('y')
 end
-  prompt("GOODBYE !!")
+
+prompt("GOODBYE !!")
