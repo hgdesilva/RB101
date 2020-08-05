@@ -12,7 +12,7 @@ player = []
 dealer = []
 GAME_TARGET = 21
 DEALER_MIN = 17
-scores = { 'player' => 0, 'dealer' => 0 }
+scores = { 'player' => 0, 'dealer' => 0, 'draw' => 0 }
 winner = ''
 
 def deal(deck, player)
@@ -103,6 +103,7 @@ def dealer_turn(deck, dealer, player)
 end
 
 loop do
+  system("clear")
   setup(deck, player, dealer)
   player_turn(deck, player, dealer)
   player_total = total(player)
@@ -133,11 +134,13 @@ loop do
 
   if winner == 'draw'
     prompt("It's a draw")
+    scores['draw'] += 1
   else
     prompt("#{winner.capitalize} wins!")
     scores[winner] += 1
   end
 
+  break if scores.values.sum == 5
   puts "Would you like to play again?"
   again = gets.chomp.downcase
   break if again =~ /\A[^y]/
@@ -146,6 +149,7 @@ loop do
   dealer = []
 end
 
+puts
 puts "Goodbye!"
 prompt("Final scores are:")
 prompt("You scored #{scores['player']}, dealer scored #{scores['dealer']}")
